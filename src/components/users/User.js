@@ -1,10 +1,14 @@
-import React, { useEffect, Fragment } from 'react';
+import React, { useEffect, Fragment, useContext } from 'react';
 import Spinner from '../layout/Spinner';
 import Repos from '../repos/Repos';
-import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
+import GithubContext from '../../context/github/githubContext';
 
-const User = ({ user, loading, getUser, getUserRepos, repos, match }) => {
+const User = ({ match }) => {
+  const githubContext = useContext(GithubContext);
+
+  const { getUser, loading, user, repos, getUserRepos } = githubContext;
+
   useEffect(() => {
     getUser(match.params.login);
     getUserRepos(match.params.login);
@@ -31,22 +35,22 @@ const User = ({ user, loading, getUser, getUserRepos, repos, match }) => {
 
   return (
     <Fragment>
-      <Link to="/" className="btn btn-light">
+      <Link to='/' className='btn btn-light'>
         Back To Search
       </Link>
       Hireable:{' '}
       {hireable ? (
-        <i className="fas fa-check text-success"></i>
+        <i className='fas fa-check text-success'></i>
       ) : (
-        <i className="text-danger fas fa-times-circle"></i>
+        <i className='text-danger fas fa-times-circle'></i>
       )}
-      <div className="card grid-2">
-        <div className="all-center">
+      <div className='card grid-2'>
+        <div className='all-center'>
           <img
             src={avatar_url}
-            className="round-img"
+            className='round-img'
             style={{ width: '150px' }}
-            alt=""
+            alt=''
           />
           <h1>{name}</h1>
           <p>Location: {location}</p>
@@ -58,7 +62,7 @@ const User = ({ user, loading, getUser, getUserRepos, repos, match }) => {
               <p>{bio}</p>
             </Fragment>
           )}
-          <a href={html_url} className="btn btn-dark my-1">
+          <a href={html_url} className='btn btn-dark my-1'>
             Visit GitHub Profile
           </a>
           <ul>
@@ -86,23 +90,15 @@ const User = ({ user, loading, getUser, getUserRepos, repos, match }) => {
           </ul>
         </div>
       </div>
-      <div className="card text-center">
-        <div className="badge badge-primary">Followers: {followers}</div>
-        <div className="badge badge-success">Following: {following}</div>
-        <div className="badge badge-light">Public Repos: {public_repos}</div>
-        <div className="badge badge-dark">Public Gists: {public_gists}</div>
+      <div className='card text-center'>
+        <div className='badge badge-primary'>Followers: {followers}</div>
+        <div className='badge badge-success'>Following: {following}</div>
+        <div className='badge badge-light'>Public Repos: {public_repos}</div>
+        <div className='badge badge-dark'>Public Gists: {public_gists}</div>
       </div>
       <Repos repos={repos} />
     </Fragment>
   );
-};
-
-User.propTypes = {
-  loading: PropTypes.bool,
-  user: PropTypes.object.isRequired,
-  repos: PropTypes.array.isRequired,
-  getUser: PropTypes.func.isRequired,
-  getUserRepos: PropTypes.func.isRequired
 };
 
 export default User;
